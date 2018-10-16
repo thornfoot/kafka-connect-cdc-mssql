@@ -38,6 +38,7 @@ class MsSqlConnectionPoolDataSourceFactory implements ConnectionPoolDataSourceFa
     dataSource.setPortNumber(this.config.serverPort);
     dataSource.setUser(this.config.jdbcUsername);
     dataSource.setPassword(this.config.jdbcPassword);
+    dataSource.setMultiSubnetFailover(this.config.multiSubnetFailover);
 
     if (Strings.isNullOrEmpty(connectionKey.databaseName)) {
       dataSource.setDatabaseName(this.config.initialDatabase);

@@ -29,19 +29,24 @@ class MsSqlSourceConnectorConfig extends PooledCDCSourceConnectorConfig<MsSqlCon
       "with change tracking enabled.";
   static final List<String> CHANGE_TRACKING_TABLES_DEFAULT = ImmutableList.of();
 
-  public final List<String> changeTrackingTables;
+  static final String MULTI_SUBNET_FAILOVER_CONF = "multi.subnet.failover";
+  static final String MULTI_SUBNET_FAILOVER_DOC = "Use High Availability MultiSubnetFailover (true/false)";
 
+  public final List<String> changeTrackingTables;
+  public final boolean multiSubnetFailover;
   private final MsSqlConnectionPoolDataSourceFactory connectionPoolDataSourceFactory;
 
   public MsSqlSourceConnectorConfig(Map<String, String> parsedConfig) {
     super(config(), parsedConfig);
     this.changeTrackingTables = this.getList(CHANGE_TRACKING_TABLES_CONFIG);
+    this.multiSubnetFailover = this.getBoolean(MULTI_SUBNET_FAILOVER_CONF);
     this.connectionPoolDataSourceFactory = new MsSqlConnectionPoolDataSourceFactory(this);
   }
 
   public static ConfigDef config() {
     return PooledCDCSourceConnectorConfig.config()
-        .define(CHANGE_TRACKING_TABLES_CONFIG, ConfigDef.Type.LIST, CHANGE_TRACKING_TABLES_DEFAULT, ConfigDef.Importance.MEDIUM, CHANGE_TRACKING_TABLES_DOC);
+        .define(CHANGE_TRACKING_TABLES_CONFIG, ConfigDef.Type.LIST, CHANGE_TRACKING_TABLES_DEFAULT, ConfigDef.Importance.MEDIUM, CHANGE_TRACKING_TABLES_DOC)
+        .define(MULTI_SUBNET_FAILOVER_CONF, ConfigDef.Type.BOOLEAN, false, ConfigDef.Importance.LOW, MULTI_SUBNET_FAILOVER_DOC);
   }
 
   @Override
